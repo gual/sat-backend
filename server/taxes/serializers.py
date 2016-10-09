@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from retail.models import Law, Tax, Calculation
+from taxes.models import Law, Tax, Calculation
 
 class LawSerializer(serializers.ModelSerializer):
     """Serializer to represent the Law model"""

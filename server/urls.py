@@ -16,6 +16,12 @@ Including another URLconf
 from django.conf.urls import url
 # from django.contrib import admin
 
-urlpatterns = [
-    # url(r'^admin/', admin.site.urls),
-]
+from rest_framework.routers import DefaultRouter
+from taxes.views import LawViewSet, TaxViewSet, CalculationViewSet
+
+router = DefaultRouter()
+router.register(prefix='laws', viewset=LawViewSet)
+router.register(prefix='taxes', viewset=TaxViewSet)
+router.register(prefix='calculations', viewset=CalculationViewSet)
+
+urlpatterns = router.urls

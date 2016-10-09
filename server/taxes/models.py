@@ -8,13 +8,13 @@ class Law(models.Model):
 
 class Tax(models.Model):
     """A tax"""
-    name = models.CharField(max_length=1000)
     law = models.ForeignKey(Law)
+    name = models.CharField(max_length=1000)
 
 class Calculation(models.Model):
     """Data for calculating a tax"""
     tax = models.ForeignKey(Tax)
-    taxable = models.DecimalField(decimal_places=2)
-    surplus = models.DecimalField(decimal_places=2)
-    value = models.DecimalField(decimal_places=2)
+    taxable = models.DecimalField(max_digits=11, decimal_places=2)
+    surplus = models.DecimalField(max_digits=11, decimal_places=2)
+    value = models.DecimalField(max_digits=11, decimal_places=2)
     description = models.CharField(max_length=1000)

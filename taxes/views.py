@@ -1,21 +1,39 @@
 from rest_framework import viewsets
-from taxes.models import Law, Tax, Calculation
-from taxes.serializers import LawSerializer, TaxSerializer,CalculationSerializer
+from taxes.models import Token, Determinant, TaxableIncome, Rate, RateRange, DeclarationPaymentMode, Tax
+from taxes.serializers import TokenSerializer, DeterminantSerializer, TaxableIncomeSerializer, RateSerializer, \
+    RateRangeSerializer, DeclarationPaymentModeSerializer, TaxSerializer
 
 
-class LawViewSet(viewsets.ModelViewSet):
-    """ ViewSet for viewing and editing Law objects """
-    queryset = Law.objects.all()
-    serializer_class = LawSerializer
+class TokenViewSet(viewsets.ModelViewSet):
+    queryset = Token.objects.all()
+    serializer_class = TokenSerializer
+
+
+class DeterminantViewSet(viewsets.ModelViewSet):
+    queryset = Determinant.objects.all()
+    serializer_class = DeterminantSerializer
+
+
+class TaxableIncomeViewSet(viewsets.ModelViewSet):
+    queryset = TaxableIncome.objects.all()
+    serializer_class = TaxableIncomeSerializer
+
+
+class RateViewSet(viewsets.ModelViewSet):
+    queryset = Rate.objects.all()
+    serializer_class = RateSerializer
+
+
+class RateRangeViewSet(viewsets.ModelViewSet):
+    queryset = RateRange.objects.all()
+    serializer_class = RateRangeSerializer
+
+
+class DeclarationPaymentModeViewSet(viewsets.ModelViewSet):
+    queryset = DeclarationPaymentMode.objects.all()
+    serializer_class = DeclarationPaymentModeSerializer
 
 
 class TaxViewSet(viewsets.ModelViewSet):
-    """ ViewSet for viewing and editing Tax objects """
     queryset = Tax.objects.all()
     serializer_class = TaxSerializer
-
-
-class CalculationViewSet(viewsets.ModelViewSet):
-    """ ViewSet for viewing and editing Calculation objects """
-    queryset = Calculation.objects.all()
-    serializer_class = CalculationSerializer

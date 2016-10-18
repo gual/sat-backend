@@ -1,6 +1,4 @@
 from django.db import models
-from django.utils import timezone
-from django.core.validators import MaxValueValidator, MinValueValidator
 
 from enumfields import EnumField, EnumIntegerField
 from enumfields import Enum
@@ -41,7 +39,7 @@ class Rate(models.Model):
     determinants = models.ManyToManyField(Determinant)
 
 
-class RateRanges(models.Model):
+class RateRange(models.Model):
     name = models.CharField(max_length=1000)
     upper_limit = models.DecimalField(max_digits=11, decimal_places=2)
     lower_limit = models.DecimalField(max_digits=11, decimal_places=2)

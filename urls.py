@@ -17,11 +17,16 @@ from django.conf.urls import url
 # from django.contrib import admin
 
 from rest_framework.routers import DefaultRouter
-from taxes.views import LawViewSet, TaxViewSet, CalculationViewSet
+from taxes.views import TokenViewSet, DeterminantViewSet, TaxableIncomeViewSet, RateViewSet, RateRangeViewSet,\
+    DeclarationPaymentModeViewSet, TaxViewSet
 
 router = DefaultRouter()
-router.register(prefix='laws', viewset=LawViewSet)
+router.register(prefix='tokens', viewset=TokenViewSet)
+router.register(prefix='determinants', viewset=DeterminantViewSet)
+router.register(prefix='taxableincomes', viewset=TaxableIncomeViewSet)
+router.register(prefix='rates', viewset=RateViewSet)
+router.register(prefix='rateranges', viewset=RateRangeViewSet)
+router.register(prefix='declarationpaymentmodes', viewset=DeclarationPaymentModeViewSet)
 router.register(prefix='taxes', viewset=TaxViewSet)
-router.register(prefix='calculations', viewset=CalculationViewSet)
 
 urlpatterns = router.urls

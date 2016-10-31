@@ -2,6 +2,5 @@ Django==1.10.2
 django-cors-headers==1.2.2
 django-enumfields==0.8.2
 djangorestframework==3.4.7
-enum34==1.1.6
 gunicorn==19.6.0
 six==1.10.0

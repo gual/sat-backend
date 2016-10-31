@@ -1,19 +1,5 @@
 from django.db import models
 
-from enumfields import EnumField, EnumIntegerField
-from enumfields import Enum
-
-
-class Periodicity(Enum):
-    MONTHLY = 1
-    QUARTERLY = 3
-    YEARLY = 12
-
-
-class TaxableSubject(Enum):
-    ESTABLISHMENT = "E"
-    PROPERTY = "P"
-
 
 class Token(models.Model):
     name = models.CharField(max_length=100)
@@ -28,15 +14,8 @@ class Determinant(models.Model):
 class TaxableIncome(models.Model):
     name = models.CharField(max_length=500)
     description = models.CharField(max_length=2000)
-    tokens = models.ManyToManyField(Token)
+    tokens = models.ManyToManyField(Token, blank=True)
     formula = models.CharField(max_length=2000)
-
-
-class Rate(models.Model):
-    valid_until = models.DateField(null=True)
-    tokens = models.ManyToManyField(Token)
-    formula = models.CharField(max_length=2000)
-    determinants = models.ManyToManyField(Determinant)
 
 
 class RateRange(models.Model):
@@ -45,24 +24,42 @@ class RateRange(models.Model):
     lower_limit = models.DecimalField(max_digits=11, decimal_places=2)
     fixed_amount = models.DecimalField(max_digits=11, decimal_places=2)
     variable_amount = models.DecimalField(max_digits=11, decimal_places=2)
-    rate = models.ForeignKey(Rate)
+
+
+class Rate(models.Model):
+    valid_until = models.DateField(null=True, blank=True)
+    tokens = models.ManyToManyField(Token, blank=True)
+    formula = models.CharField(max_length=2000)
+    determinants = models.ManyToManyField(Determinant, blank=True)
+    ranges = models.ManyToManyField(RateRange, blank=True)
 
 
 class DeclarationPaymentMode(models.Model):
-    declaration_periodicity = EnumIntegerField(Periodicity)
+    PERIODICITY_CHOICES = (
+        ('1', 'Monthly'),
+        ('3', 'Quarterly'),
+        ('12', 'Yearly'),
+    )
+
+    declaration_periodicity = models.CharField(max_length=1, choices=PERIODICITY_CHOICES)
     declaration_since = models.IntegerField()
     declaration_until = models.IntegerField()
-    payment_periodicity = EnumIntegerField(Periodicity)
+    payment_periodicity = models.CharField(max_length=1, choices=PERIODICITY_CHOICES)
     payment_since = models.IntegerField()
     payment_until = models.IntegerField()
 
 
 class Tax(models.Model):
+    SUBJECTS_CHOICES = (
+        ('E', 'Establishment'),
+        ('P', 'Property'),
+    )
+
     name = models.CharField(max_length=1000)
     origin_law = models.CharField(max_length=2000)
-    taxable_subject = EnumField(TaxableSubject)
-    grace_days = models.IntegerField
+    taxable_subject = models.CharField(max_length=1, choices=SUBJECTS_CHOICES)
+    grace_days = models.IntegerField()
     taxable_income = models.ForeignKey(TaxableIncome)
     rate = models.ForeignKey(Rate)
     declaration_payment_mode = models.ForeignKey(DeclarationPaymentMode)
-    determinants = models.ManyToManyField(Determinant)
+    determinants = models.ManyToManyField(Determinant, blank=True)

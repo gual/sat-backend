@@ -6,17 +6,22 @@ from rest_framework.response import Response
 
 from contributors.models import Establishment, Property
 from contributors.serializers import EstablishmentSerializer, PropertySerializer
+
 from taxes.models import Tax
 
 
-def add_tribute_to_contributor(request, contributor):
-    tribute_key = int(request.data['tribute'])
+def update_tribute_contributor(request, action, queryset, pk, serializer):
+    contributor = get_object_or_404(queryset, pk=pk)
 
+    tribute_key = int(request.data['tribute'])
     tax_queryset = Tax.objects.all()
     tax = get_object_or_404(tax_queryset, pk=tribute_key)
 
-    contributor.tributes.add(tax)
+    getattr(contributor.tributes, action)(tax)
     contributor.save()
+
+    serializer = serializer(contributor)
+    return Response(serializer.data)
 
 
 class EstablishmentViewSet(viewsets.ModelViewSet):
@@ -26,11 +31,14 @@ class EstablishmentViewSet(viewsets.ModelViewSet):
     @detail_route(methods=['post'])
     def add_tribute(self, request, pk=None):
         queryset = Establishment.objects.all()
-        establishment = get_object_or_404(queryset, pk=pk)
 
-        add_tribute_to_contributor(request, establishment)
+        return update_tribute_contributor(request, 'add', queryset, pk, EstablishmentSerializer)
 
-        return Response({'status': 'tribute added to establishment'})
+    @detail_route(methods=['post'])
+    def remove_tribute(self, request, pk=None):
+        queryset = Property.objects.all()
+
+        return update_tribute_contributor(request, 'remove', queryset, pk, EstablishmentSerializer)
 
 
 class PropertyViewSet(viewsets.ModelViewSet):
@@ -40,8 +48,11 @@ class PropertyViewSet(viewsets.ModelViewSet):
     @detail_route(methods=['post'])
     def add_tribute(self, request, pk=None):
         queryset = Property.objects.all()
-        property_ = get_object_or_404(queryset, pk=pk)
 
-        add_tribute_to_contributor(request, property_)
+        return update_tribute_contributor(request, 'add', queryset, pk, PropertySerializer)
 
-        return Response({'status': 'tribute added to property'})
+    @detail_route(methods=['post'])
+    def remove_tribute(self, request, pk=None, ):
+        queryset = Property.objects.all()
+
+        return update_tribute_contributor(request, 'remove', queryset, pk, PropertySerializer)

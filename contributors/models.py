@@ -1,5 +1,7 @@
 from django.db import models
 
+from taxes.models import Tax
+
 
 class Person(models.Model):
     name = models.CharField(max_length=100)
@@ -59,6 +61,8 @@ class Establishment(OwnedItem):
     start_date = models.CharField(max_length=100)
     type = models.CharField(max_length=10)
 
+    tributes = models.ManyToManyField(Tax, blank=True)
+
 
 class Property(OwnedItem):
     code = models.CharField(max_length=15)
@@ -84,3 +88,5 @@ class Property(OwnedItem):
     total_area = models.DecimalField(max_digits=11, decimal_places=2)
     type = models.CharField(max_length=15)
     zone = models.CharField(max_length=15)
+
+    tributes = models.ManyToManyField(Tax, blank=True)

@@ -36,7 +36,7 @@ class EstablishmentViewSet(viewsets.ModelViewSet):
 
     @detail_route(methods=['post'])
     def remove_tribute(self, request, pk=None):
-        queryset = Property.objects.all()
+        queryset = Establishment.objects.all()
 
         return update_tribute_contributor(request, 'remove', queryset, pk, EstablishmentSerializer)
 

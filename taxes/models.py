@@ -56,6 +56,7 @@ class Tax(models.Model):
     )
 
     name = models.CharField(max_length=1000)
+    short_name = models.CharField(max_length=6, null=True, unique=True)
     origin_law = models.CharField(max_length=2000)
     taxable_subject = models.CharField(max_length=1, choices=SUBJECTS_CHOICES)
     grace_days = models.IntegerField()

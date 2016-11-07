@@ -8,7 +8,7 @@ class Token(models.Model):
 class Determinant(models.Model):
     name = models.CharField(max_length=500)
     condition = models.CharField(max_length=200, null=True, blank=True)
-    value = models.DecimalField(max_digits=11, decimal_places=2)
+    value = models.DecimalField(max_digits=15, decimal_places=6)
 
 
 class TaxableIncome(models.Model):
@@ -20,15 +20,15 @@ class TaxableIncome(models.Model):
 
 class RateRange(models.Model):
     name = models.CharField(max_length=1000)
-    upper_limit = models.DecimalField(max_digits=11, decimal_places=2)
-    lower_limit = models.DecimalField(max_digits=11, decimal_places=2)
-    fixed_amount = models.DecimalField(max_digits=11, decimal_places=2)
-    variable_amount = models.DecimalField(max_digits=11, decimal_places=2)
+    upper_limit = models.DecimalField(max_digits=15, decimal_places=6)
+    lower_limit = models.DecimalField(max_digits=15, decimal_places=6)
+    fixed_amount = models.DecimalField(max_digits=15, decimal_places=6)
+    variable_amount = models.DecimalField(max_digits=15, decimal_places=6)
 
 
 class Rate(models.Model):
     valid_until = models.DateField(null=True, blank=True)
-    tokens = models.ManyToManyField(Token, blank=True)
+    tokens = models.ManyToManyField(Token, blank=True, db_index=True, related_name='tokens')
     formula = models.CharField(max_length=2000)
     determinants = models.ManyToManyField(Determinant, blank=True)
     ranges = models.ManyToManyField(RateRange, blank=True)

@@ -7,7 +7,7 @@ class Token(models.Model):
 
 class Determinant(models.Model):
     name = models.CharField(max_length=500)
-    condition = models.CharField(max_length=200)
+    condition = models.CharField(max_length=200, null=True, blank=True)
     value = models.DecimalField(max_digits=11, decimal_places=2)
 
 

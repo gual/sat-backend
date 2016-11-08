@@ -28,7 +28,7 @@ class RateRange(models.Model):
 
 class Rate(models.Model):
     valid_until = models.DateField(null=True, blank=True)
-    tokens = models.ManyToManyField(Token, blank=True, db_index=True, related_name='tokens')
+    tokens = models.ManyToManyField(Token, blank=True, db_index=True)
     formula = models.CharField(max_length=2000)
     determinants = models.ManyToManyField(Determinant, blank=True)
     ranges = models.ManyToManyField(RateRange, blank=True)

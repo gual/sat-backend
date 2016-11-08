@@ -1,5 +1,8 @@
 from rest_framework import serializers
 from taxes.models import Token, Determinant, TaxableIncome, Rate, RateRange, DeclarationPaymentMode, Tax
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class TokenSerializer(serializers.ModelSerializer):
@@ -20,6 +23,7 @@ class TaxableIncomeSerializer(serializers.ModelSerializer):
     class Meta:
         model = TaxableIncome
         fields = '__all__'
+        depth = 2
 
     def create(self, validated_data):
         tokens_data = validated_data.pop('tokens')
@@ -46,6 +50,7 @@ class RateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rate
         fields = '__all__'
+        depth = 2
 
     def create(self, validated_data):
         tokens_data = validated_data.pop('tokens')
@@ -75,30 +80,26 @@ class DeclarationPaymentModeSerializer(serializers.ModelSerializer):
 
 
 class TaxSerializer(serializers.ModelSerializer):
-    taxable_income = TaxableIncomeSerializer
-    rate = RateSerializer
+    taxable_income_id = serializers.IntegerField()
+    rate_id = serializers.IntegerField()
     declaration_payment_mode = DeclarationPaymentModeSerializer
     determinants = DeterminantSerializer(many=True)
 
     class Meta:
         model = Tax
         fields = '__all__'
-        depth = 2
+        depth = 4
         extra_kwargs = {
-            "taxable_income": {"read_only": False},
-            "rate": {"read_only": False},
             "declaration_payment_mode": {"read_only": False},
             "determinants": {"read_only": False}
         }
 
     def create(self, validated_data):
-        taxable_income_data = validated_data.pop('taxable_income')
-        rate_data = validated_data.pop('rate')
         declaration_payment_mode_data = validated_data.pop('declaration_payment_mode')
         determinants_data = validated_data.pop('determinants')
 
-        taxable_income = TaxableIncome.objects.create(**taxable_income_data)
-        rate = Rate.objects.create(**rate_data)
+        taxable_income = TaxableIncome.objects.get(pk=validated_data['taxable_income_id'])
+        rate = Rate.objects.get(pk=validated_data['rate_id'])
         declaration_payment_mode = DeclarationPaymentMode.objects.create(**declaration_payment_mode_data)
 
         tax = Tax.objects.create(
@@ -111,9 +112,5 @@ class TaxSerializer(serializers.ModelSerializer):
         for determinant_data in determinants_data:
             determinant = Determinant.objects.create(**determinant_data)
             tax.determinants.add(determinant)
-
-        tax.taxable_income = taxable_income
-        tax.rate = rate
-        tax.declaration_payment_mode = declaration_payment_mode
 
         return tax

@@ -42,11 +42,11 @@ class DeclarationPaymentMode(models.Model):
     )
 
     declaration_periodicity = models.CharField(max_length=1, choices=PERIODICITY_CHOICES)
-    declaration_since = models.IntegerField()
-    declaration_until = models.IntegerField()
+    declaration_since = models.DateField()
+    declaration_until = models.DateField()
     payment_periodicity = models.CharField(max_length=1, choices=PERIODICITY_CHOICES)
-    payment_since = models.IntegerField()
-    payment_until = models.IntegerField()
+    payment_since = models.DateField()
+    payment_until = models.DateField()
 
 
 class Tax(models.Model):

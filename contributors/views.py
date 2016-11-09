@@ -4,8 +4,8 @@ from rest_framework import viewsets
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
 
-from contributors.models import Establishment, Property
-from contributors.serializers import EstablishmentSerializer, PropertySerializer
+from contributors.models import Establishment, Property, Person, Company
+from contributors.serializers import EstablishmentSerializer, PropertySerializer, PersonSerializer, CompanySerializer
 
 from taxes.models import Tax
 
@@ -56,3 +56,13 @@ class PropertyViewSet(viewsets.ModelViewSet):
         queryset = Property.objects.all()
 
         return update_tribute_contributor(request, 'remove', queryset, pk, PropertySerializer)
+
+
+class PersonViewSet(viewsets.ModelViewSet):
+    queryset = Person.objects.all()
+    serializer_class = PersonSerializer
+
+
+class CompanyViewSet(viewsets.ModelViewSet):
+    queryset = Company.objects.all()
+    serializer_class = CompanySerializer

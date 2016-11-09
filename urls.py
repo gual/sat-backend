@@ -18,7 +18,7 @@ Including another URLconf
 from rest_framework.routers import DefaultRouter
 
 from taxes.views import TaxViewSet, TaxableIncomeViewSet, RateViewSet
-from contributors.views import EstablishmentViewSet, PropertyViewSet
+from contributors.views import EstablishmentViewSet, PropertyViewSet, PersonViewSet, CompanyViewSet
 
 router = DefaultRouter()
 router.register(prefix='taxes', viewset=TaxViewSet)
@@ -26,6 +26,8 @@ router.register(prefix='taxable_incomes', viewset=TaxableIncomeViewSet)
 router.register(prefix='rates', viewset=RateViewSet)
 router.register(prefix='establishments', viewset=EstablishmentViewSet)
 router.register(prefix='properties', viewset=PropertyViewSet)
+router.register(prefix='people', viewset=PersonViewSet)
+router.register(prefix='companies', viewset=CompanyViewSet)
 
 
 urlpatterns = router.urls

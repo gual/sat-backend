@@ -4,21 +4,21 @@ from taxes.models import Tax
 
 
 class Person(models.Model):
+    code = models.CharField(max_length=15, unique=True)
     name = models.CharField(max_length=100)
-    other_names = models.CharField(max_length=500)
-    code = models.CharField(max_length=15)
+    other_names = models.CharField(max_length=500, blank=True, null=True)
     surname = models.CharField(max_length=100)
-    other_surnames = models.CharField(max_length=500)
-    dui = models.CharField(max_length=10)
-    nit = models.CharField(max_length=16)
-    birthdate = models.CharField(max_length=100)
+    other_surnames = models.CharField(max_length=500, blank=True, null=True)
+    dui = models.CharField(max_length=10, unique=True)
+    nit = models.CharField(max_length=16, unique=True)
+    birthdate = models.DateField()
 
 
 class Company(models.Model):
-    code = models.CharField(max_length=15)
-    social_reason = models.CharField(max_length=250)
-    nit = models.CharField(max_length=16)
-    start_date = models.CharField(max_length=100)
+    code = models.CharField(max_length=15, unique=True)
+    social_reason = models.CharField(max_length=250, unique=True)
+    nit = models.CharField(max_length=16, unique=True)
+    start_date = models.DateField()
     legal_representative = models.ForeignKey(Person)
 
 

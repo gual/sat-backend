@@ -13,8 +13,8 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-# from django.contrib import admin
-
+from django.conf.urls import url, include
+from django.views.generic.base import TemplateView
 from rest_framework.routers import DefaultRouter
 
 from taxes.views import TaxViewSet, TaxableIncomeViewSet, RateViewSet
@@ -29,5 +29,8 @@ router.register(prefix='properties', viewset=PropertyViewSet)
 router.register(prefix='people', viewset=PersonViewSet)
 router.register(prefix='companies', viewset=CompanyViewSet)
 
-
-urlpatterns = router.urls
+urlpatterns = [
+    url(r'^$', TemplateView.as_view(template_name='index.html'), name='index'),
+    url(r'^api/', include(router.urls)),
+    url(r'^(?P<path>.*)/$', TemplateView.as_view(template_name='index.html'))
+]
